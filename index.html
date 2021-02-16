@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="./index.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css"
+        />
+        <script>
+            let ws = new WebSocket("ws://localhost:5000");
+            ws.onopen = function (e) {
+                console.log("websocket open");
+                // console.log(ws);
+            };
+            // ws.onmessage = (e) => {};
+            // ws.onmessage = function (e) {
+            //     console.log(data);
+            // };
+            // function appendLog(data) {
+            //     var messages = document.getElementById("messages");
+            //     var messageElem = document.createElement("li");
+            //     messageElem.innerHTML = `${data.id} : ${data.message}`;
+            //     messages.appendChild(messageElem);
+            // }
+            ws.onmessage = function (e) {
+                var data = JSON.parse(e.data);
+                messageReceived(data);
+                console.log(data);
+            };
+            const messageReceived = (data) => {
+                var messages = document.getElementById("messages");
+                var newElement = document.createElement("li");
+                newElement.innerHTML = `${data.message}`;
+                newElement.classList.add("message-received");
+                messages.appendChild(newElement);
+            };
+            const messageSent = (value) => {
+                var messages = document.getElementById("messages");
+                var newElement = document.createElement("li");
+                newElement.innerHTML = `${value}`;
+                newElement.classList.add("message-sent");
+                messages.appendChild(newElement);
+            };
+            function sendMessage() {
+                var messageField = document.getElementById("inputField");
+                messageSent(messageField.value);
+                console.log("inside");
+                if (ws.readyState === WebSocket.OPEN) {
+                    ws.send(messageField.value);
+                }
+                messageField.value = "";
+                messageField.focus();
+            }
+        </script>
+    </head>
+    <body>
+        <!-- <div id="chatbox" class="container">
+            <ul id="messages"></ul>
+        </div>
+        <input id="inputField" />
+        <button onclick="sendMessage()">Send Message</button> -->
+        <div class="ui container">
+            <div class="ui text container">
+                <div id="messages" class="chatbox"></div>
+                <hr />
+                <form role="form" id="chat_form" onsubmit="sendMessage(); return false;">
+                    <div class="form-group">
+                        <input
+                            class="form-control"
+                            type="text"
+                            id="inputField"
+                            name="message"
+                            placeholder="Message Here......"
+                            value=""
+                            autofocus
+                        />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

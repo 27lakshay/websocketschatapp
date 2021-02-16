@@ -1,0 +1,21 @@
+.message-sent {
+    font-size: 20px;
+    color: blue;
+    align-self: flex-end;
+    /* float: right; */
+}
+
+#messages {
+    list-style: none;
+}
+
+.chatbox {
+    display: flex;
+    flex-direction: column;
+}
+.message-received {
+    font-size: 20px;
+    color: red;
+    align-self: flex-start;
+    /* float: left; */
+}
